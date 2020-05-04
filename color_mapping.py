@@ -3,6 +3,7 @@ import cv2 as cv
 import numpy as np
 
 
+
 # read data from .json file from azure
 def read_emotion():
     with open('result', 'r') as f:
