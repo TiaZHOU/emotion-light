@@ -161,5 +161,5 @@ cv.imshow('clA', clA)
 cv.imshow('clB', clB)
 cv.waitKey(0)
 '''
-# sample_merge_by_add()
-sample_merge_by_weight()
+sample_merge_by_add()
+# sample_merge_by_weight()
