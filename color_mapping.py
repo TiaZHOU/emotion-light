@@ -81,7 +81,6 @@ def color_pick(color_num):
     elif color_num == 7:
         return color7_white
 
-
 # define function which user change color for specific emotion
 def color_change(formal_model, color, emo):
     formal_model[emo] = color
@@ -127,6 +126,7 @@ color_list = max_two_emo(emotion)
 # print(color_list)
 
 # simulate user change color3 to emotion5
+# TODO set color change API for  interface
 color_change(model, 3, 5)
 
 # generate two pic then merge on weight
@@ -134,10 +134,15 @@ output = [0 for i in range(len(color_list))]
 for i in range(len(color_list)):
     img1 = color_pick(model[color_list[i][0]])
     img2 = color_pick(model[color_list[i][1]])
+    # TODO the add should more sensitive because many neutral
     clA = cv.addWeighted(img1, emotion[i][color_list[i][0]], img2, emotion[i][color_list[i][1]], 0)
     print(clA[0][0])  # final result RGB code
-
-# number infor
+    output[i] = create_image(r=clA[i][0][0], g=clA[i][0][1], b=clA[i][0][2])
+# TODO transfer the result into Arduino kit
+cv.imshow("color result1", output[0])
+cv.imshow("color result2", output[1])
+cv.waitKey(0)
+# number info
 '''
 color_list[0][0]  # pos 5 in first pic, refer to neutral
 color_list[0][1]  # pos 6 in first pic, refer to sadness
@@ -162,4 +167,4 @@ cv.imshow('clB', clB)
 cv.waitKey(0)
 '''
 # sample_merge_by_add()
-sample_merge_by_weight()
+# sample_merge_by_weight()
