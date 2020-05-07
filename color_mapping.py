@@ -3,6 +3,17 @@ import cv2 as cv
 import numpy as np
 
 
+# store color results into .txt
+def store(data):
+    file = open('displayList.txt', 'w')
+    for ip in data:
+        for i in ip:
+            file.write(i)
+            file.write(' ')
+        file.write('\n')
+    file.close()
+
+# load json data from file
 # read data from .json file from azure
 def read_emotion():
     with open('result', 'r') as f:
@@ -36,25 +47,6 @@ def create_image(g, b, r):
     return img
 
 
-def sample_merge_by_add():
-    # samples for merge 1(add by cv)
-    sample_img1 = create_image(g=255, b=44, r=122)
-    sample_img2 = create_image(g=0, b=233, r=1)
-    cv.imshow("img1", sample_img1)
-    cv.imshow("img2", sample_img2)
-    cv.imshow("merge to saturation", cv.add(sample_img1, sample_img2))
-    cv.imshow("merge to overflow", np.add(sample_img1, sample_img2))
-    cv.waitKey(0)
-
-
-def sample_merge_by_weight():
-    color0_red = create_image(r=255, g=0, b=0)
-    color3_green = create_image(r=0, g=255, b=0)
-    s = cv.addWeighted(color0_red, 0.7, color3_green, 0.3, 0)
-    cv.imshow("sample", s)
-    cv.waitKey(0)
-
-
 def color_pick(color_num):
     color0_red = create_image(r=255, g=0, b=0)
     color1_orange = create_image(r=255, g=165, b=0)
@@ -80,6 +72,7 @@ def color_pick(color_num):
         return color6_purple
     elif color_num == 7:
         return color7_white
+
 
 # define function which user change color for specific emotion
 def color_change(formal_model, color, emo):
@@ -130,18 +123,22 @@ color_list = max_two_emo(emotion)
 color_change(model, 3, 5)
 
 # generate two pic then merge on weight
-output = [0 for i in range(len(color_list))]
+#
+output = [[0 for i in range(4)] for i in range(len(color_list))]
+display = [0 for i in range(len(color_list))]
 for i in range(len(color_list)):
     img1 = color_pick(model[color_list[i][0]])
     img2 = color_pick(model[color_list[i][1]])
     # TODO the add should more sensitive because many neutral
     clA = cv.addWeighted(img1, emotion[i][color_list[i][0]], img2, emotion[i][color_list[i][1]], 0)
-    print(clA[0][0])  # final result RGB code
-    output[i] = create_image(r=clA[i][0][0], g=clA[i][0][1], b=clA[i][0][2])
+    output[i][0] = clA[0][0][0].astype(str)
+    output[i][1] = clA[0][0][1].astype(str)
+    output[i][2] = clA[0][0][2].astype(str)
+    output[i][3] = "1000"
+    print(output[i])  # final result RGB code
+    display[i] = create_image(r=clA[i][0][0], g=clA[i][0][1], b=clA[i][0][2])
 # TODO transfer the result into Arduino kit
-cv.imshow("color result1", output[0])
-cv.imshow("color result2", output[1])
-cv.waitKey(0)
+store(output)
 # number info
 '''
 color_list[0][0]  # pos 5 in first pic, refer to neutral
@@ -166,5 +163,3 @@ cv.imshow('clA', clA)
 cv.imshow('clB', clB)
 cv.waitKey(0)
 '''
-# sample_merge_by_add()
-# sample_merge_by_weight()
