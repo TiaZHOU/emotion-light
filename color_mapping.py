@@ -1,6 +1,7 @@
 import json
 import cv2 as cv
 import numpy as np
+import serial
 
 
 # store color results into .txt
@@ -12,6 +13,7 @@ def store(data):
             file.write(' ')
         file.write('\n')
     file.close()
+
 
 # load json data from file
 # read data from .json file from azure
@@ -137,6 +139,7 @@ for i in range(len(color_list)):
     output[i][3] = "1000"
     print(output[i])  # final result RGB code
     display[i] = create_image(r=clA[i][0][0], g=clA[i][0][1], b=clA[i][0][2])
+    ser = serial.Serial("COM5", 9600, timeout=5)
 # TODO transfer the result into Arduino kit
 store(output)
 # number info
