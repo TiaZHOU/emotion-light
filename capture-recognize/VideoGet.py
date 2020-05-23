@@ -8,8 +8,6 @@ import json
 # imports for sending images to azure
 import requests
 
-from PIL import Image
-
 
 class VideoGet:
     """

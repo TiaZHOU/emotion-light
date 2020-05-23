@@ -5,10 +5,10 @@ import json
 import cv2 as cv
 import numpy as np
 import sys
-from startpage import Ui_StartPage
-from readCamera import MainApp
-from lightColorDashboard import Ui_lightColor
-from color_mapping  import generate
+from interface.startpage import Ui_StartPage
+from interface.readCamera import MainApp
+from interface.lightColorDashboard import Ui_lightColor
+from interface.color_mapping import generate
 
 
 class mainWindow(QMainWindow, Ui_StartPage):
