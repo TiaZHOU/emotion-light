@@ -17,7 +17,7 @@ def store(data):
 
 # load json data from file
 # read data from .json file from azure
-def read_emotion():
+def read_emotion(saturate):
     with open('result', 'r') as f:
         data = json.load(f)
     # count how many face
@@ -28,16 +28,26 @@ def read_emotion():
     # define lists for different emotions
     emotion = [[0 for i in range(8)] for i in range(counter)]
     for i in range(counter):
-        emotion[i][0] = data[i]['faceAttributes']['emotion']['anger']
-        emotion[i][1] = data[i]['faceAttributes']['emotion']['contempt']
-        emotion[i][2] = data[i]['faceAttributes']['emotion']['disgust']
-        emotion[i][3] = data[i]['faceAttributes']['emotion']['fear']
-        emotion[i][4] = data[i]['faceAttributes']['emotion']['happiness']
-        emotion[i][5] = data[i]['faceAttributes']['emotion']['neutral']
-        emotion[i][6] = data[i]['faceAttributes']['emotion']['sadness']
-        emotion[i][7] = data[i]['faceAttributes']['emotion']['surprise']
+        emotion[i][0] = data[i]['faceAttributes']['emotion']['happiness'] * saturate[0]
+        emotion[i][1] = data[i]['faceAttributes']['emotion']['surprise'] * saturate[1]
+        emotion[i][2] = data[i]['faceAttributes']['emotion']['neutral'] * saturate[2]
+        emotion[i][3] = data[i]['faceAttributes']['emotion']['sadness'] * saturate[3]
+        emotion[i][4] = data[i]['faceAttributes']['emotion']['contempt'] * saturate[4]
+        emotion[i][5] = data[i]['faceAttributes']['emotion']['anger'] * saturate[5]
+        emotion[i][6] = data[i]['faceAttributes']['emotion']['fear'] * saturate[6]
+        emotion[i][7] = data[i]['faceAttributes']['emotion']['disgust'] * saturate[7]
     print('total ' + counter.__str__() + ' pictures are send')
     return emotion
+'''
+pos 0   "anger"         num 0   "red"
+pos 1   "contempt"      num 1   "orange"
+pos 2   "disgust"       num 2   "yellow"
+pos 3   "fear"          num 3   "green"
+pos 4   "happiness"     num 4   "cyan"
+pos 5   "neutral"       num 5   "blue"
+pos 6   "sadness"       num 6   "purple"
+pos 7   "surprise"      num 7   "white"
+'''
 
 
 # sample for color display
@@ -54,32 +64,38 @@ def color_pick(color_num):
     color1_orange = create_image(r=255, g=165, b=0)
     color2_yellow = create_image(r=255, g=255, b=0)
     color3_green = create_image(r=0, g=255, b=0)
-    color4_cyan = create_image(r=0, g=127, b=255)
+    color4_sky = create_image(r=135, g=206, b=235)
     color5_blue = create_image(r=0, g=0, b=255)
-    color6_purple = create_image(r=139, g=0, b=255)
-    color7_white = create_image(r=255, g=255, b=255)
-    if color_num == 0:
+    color6_indigo = create_image(r=75, g=0, b=130)
+    color7_purple = create_image(r=128, g=0, b=128)
+    if color_num == 1:
         return color0_red
-    elif color_num == 1:
-        return color1_orange
     elif color_num == 2:
-        return color2_yellow
+        return color1_orange
     elif color_num == 3:
-        return color3_green
+        return color2_yellow
     elif color_num == 4:
-        return color4_cyan
+        return color3_green
     elif color_num == 5:
-        return color5_blue
+        return color4_sky
     elif color_num == 6:
-        return color6_purple
+        return color5_blue
     elif color_num == 7:
-        return color7_white
+        return color6_indigo
+    elif color_num == 8:
+        return color7_purple
 
 
 # define function which user change color for specific emotion
 def color_change(formal_model, color, emo):
     formal_model[emo] = color
     return formal_model
+
+
+def set_saturate(saturate_list, emotion_list):
+    for i in range(len(emotion_list)):
+        emotion_list[i] = emotion_list[i] * saturate_list[i]
+    return emotion_list
 
 
 def max_two_emo(emotion_result):
@@ -100,8 +116,26 @@ def max_two_emo(emotion_result):
     return set
 
 
+def preview(output_list, size):
+    pos = 0
+    img = np.zeros((30, 200, 3), np.uint8)
+    for i in range(size):
+        ptStart = (pos, 00)
+        ptEnd = (pos, 30)
+        point_color = (output_list[i][0], output_list[i][1], output_list[i][2])  # BGR
+        thickness = int(200/size)
+        lineType = 5
+        pos = pos + thickness
+        cv.line(img, ptStart, ptEnd, point_color, thickness, lineType)
+    #cv.namedWindow("image")
+    #cv.imshow('image', img)
+    cv.imwrite('preview.jpg',img)
+
+
 # main begin
-model = [0, 1, 2, 3, 4, 5, 6, 7]  # initial color model, numbers refer to colors, positions refer to emotions
+model = [1, 2, 3, 4, 4, 4, 7, 1]  # initial color model, numbers refer to colors, positions refer to emotions
+saturate = [0.49, 1, 0.08, 1, 0.27, 1, 0.12, 0.9]
+speed = 10
 # colors explain
 '''
 pos 0   "anger"         num 0   "red"
@@ -114,15 +148,15 @@ pos 6   "sadness"       num 6   "purple"
 pos 7   "surprise"      num 7   "white"
 '''
 
-emotion = read_emotion()
+emotion = read_emotion(saturate)
+# emotion = set_saturate(saturate, emotion)
 # print(emotion)
-
 color_list = max_two_emo(emotion)
 # print(color_list)
 
 # simulate user change color3 to emotion5
-# TODO set color change API for  interface
-color_change(model, 3, 5)
+# TODO set color change API for interface
+# color_change(model, 3, 5)
 
 # generate two pic then merge on weight
 #
@@ -133,15 +167,19 @@ for i in range(len(color_list)):
     img2 = color_pick(model[color_list[i][1]])
     # TODO the add should more sensitive because many neutral
     clA = cv.addWeighted(img1, emotion[i][color_list[i][0]], img2, emotion[i][color_list[i][1]], 0)
-    output[i][0] = clA[0][0][0].astype(str)
-    output[i][1] = clA[0][0][1].astype(str)
-    output[i][2] = clA[0][0][2].astype(str)
-    output[i][3] = "1000"
+    # cv.imshow('clA', clA)
+    # cv.waitKey(0)
+    output[i][0] = int(clA[0][0][0].astype(str))
+    output[i][1] = int(clA[0][0][1].astype(str))
+    output[i][2] = int(clA[0][0][2].astype(str))
+    output[i][3] = int(1000/speed)
     print(output[i])  # final result RGB code
-    display[i] = create_image(r=clA[i][0][0], g=clA[i][0][1], b=clA[i][0][2])
-    ser = serial.Serial("COM5", 9600, timeout=5)
+    #display[i] = create_image(r=clA[i][0][0], g=clA[i][0][1], b=clA[i][0][2])
+    # ser = serial.Serial("COM5", 9600, timeout=5)
 # TODO transfer the result into Arduino kit
-store(output)
+size = len(output)
+preview(output, size)
+#store(output)
 # number info
 '''
 color_list[0][0]  # pos 5 in first pic, refer to neutral
@@ -153,7 +191,7 @@ model[color_list[0][1]] # num 6 refer color6
 
 # display testing code
 '''
-cl11 = color_pick(model[color_list[0][0]])
+cl11 = color_pick(model[color_list[0][0]])  
 cl12 = color_pick(model[color_list[0][1]])
 cl21 = color_pick(model[color_list[1][0]])
 cl22 = color_pick(model[color_list[1][1]])

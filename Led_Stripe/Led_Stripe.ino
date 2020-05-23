@@ -1,4 +1,4 @@
-int green = 11;
+ int green = 11;
 int red = 12;
 int blue = 13;
 int a[3]= {0,0,0};
@@ -24,6 +24,7 @@ void display(int a[3])
   analogWrite(red,255-a[0]);
   analogWrite(green,255-a[1]);
   analogWrite(blue,255-a[2]);
+  delay(a[3]);
 }
 void loop()
 {
@@ -35,7 +36,7 @@ void loop()
       //count++;
       //incomingByte = "";
     }
-   delay(10);//不能省略，因为读取缓冲区数据需要时间
+   delay(100);//不能省略，因为读取缓冲区数据需要时间
     if(incomingByte.length() > 0) 
     {
       a[0] = atoi(incomingByte.c_str());
@@ -43,7 +44,6 @@ void loop()
      Serial.print(a[0]);
      Serial.print("\n");
      display(a);
-     delay(5);
      incomingByte = "";
     }
  }  

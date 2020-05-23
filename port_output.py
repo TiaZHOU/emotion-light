@@ -10,7 +10,7 @@ try:
     # open port
     ser = serial.Serial(portx, bps, timeout=timex)
     # write data
-    result = ser.write("255".encode())
+    result = ser.write("0 233 0".encode())
     print("total:", result)
     ser.close()  # close port
 except Exception as e:
