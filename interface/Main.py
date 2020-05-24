@@ -50,8 +50,10 @@ class colorDashboard(QMainWindow, Ui_lightColor):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+
+        self.previewButton.clicked.connect(self.previewLight)
+        self.previewButton.clicked.connect(self.previewOpen)
         self.finishButton.clicked.connect(self.finishEditing)
-        #self.previewButton.clicked.connect(self.previewLight)
 
     def happyColor(self):
         # The color selected for each emotion will be transmitted in the format of RGB
@@ -242,20 +244,11 @@ class colorDashboard(QMainWindow, Ui_lightColor):
     def previewLight(self):
         # main begin
         pictureGenerate = generate()
-        model = [1, 2, 3, 4, 4, 4, 7, 1]  # initial color model, numbers refer to colors, positions refer to emotions
-        saturate = [0.49, 1, 0.08, 1, 0.27, 1, 0.12, 0.9]
-        speed = 10
-        # colors explain
-        '''
-        pos 0   "anger"         num 0   "red"
-        pos 1   "contempt"      num 1   "orange"
-        pos 2   "disgust"       num 2   "yellow"
-        pos 3   "fear"          num 3   "green"
-        pos 4   "happiness"     num 4   "cyan"
-        pos 5   "neutral"       num 5   "blue"
-        pos 6   "sadness"       num 6   "purple"
-        pos 7   "surprise"      num 7   "white"
-        '''
+        model = [happy, surprised, neutral, sad, contempt, anger, fear,
+                 disgust]  # initial color model, numbers refer to colors, positions refer to emotions
+        saturate = [happyBright, surprisedBright, neutralBright, sadBright, contemptBright, angerBright, fearBright,
+                    disgustBright]
+        speed = speedValue
 
         emotion = generate.read_emotion(saturate)
         # emotion = set_saturate(saturate, emotion)
@@ -269,6 +262,7 @@ class colorDashboard(QMainWindow, Ui_lightColor):
 
         # generate two pic then merge on weight
         #
+        global output
         output = [[0 for i in range(4)] for i in range(len(color_list))]
         display = [0 for i in range(len(color_list))]
         for i in range(len(color_list)):
@@ -288,38 +282,22 @@ class colorDashboard(QMainWindow, Ui_lightColor):
         # TODO transfer the result into Arduino kit
         size = len(output)
         pictureGenerate.preview(output, size)
-        # store(output)
-        # number info
-        '''
-        color_list[0][0]  # pos 5 in first pic, refer to neutral
-        color_list[0][1]  # pos 6 in first pic, refer to sadness
-
-        model[color_list[0][0]] # num 5 refer color5
-        model[color_list[0][1]] # num 6 refer color6
-        '''
-
-        # display testing code
-        '''
-        cl11 = color_pick(model[color_list[0][0]])  
-        cl12 = color_pick(model[color_list[0][1]])
-        cl21 = color_pick(model[color_list[1][0]])
-        cl22 = color_pick(model[color_list[1][1]])
-
-        clA = cv.addWeighted(cl11, emotion[0][color_list[0][0]], cl12, emotion[0][color_list[0][1]], 0)
-        clB = cv.addWeighted(cl21, emotion[1][color_list[1][0]], cl22, emotion[1][color_list[1][1]], 0)
-        # print(clA[0][0])
-        # print(clB[0][0])
-        cv.imshow('clA', clA)
-        cv.imshow('clB', clB)
-        cv.waitKey(0)
-        '''
 
     def finishEditing(self):
+        r = requests.get('http://10.0.0.33/W')
+        time.sleep(0.1)
+        r = requests.get('http://10.0.0.33/W')
+        r = requests.get('http://10.0.0.33/D')
+        generate.finalout(output)
+        r = requests.get('http://10.0.0.33/D')
         # Click 'Finish' button to upload the parameters, meanwhile opening dialog to indicate upload successfully
-        print(happy, surprised, neutral, sad, contempt, anger, fear, disgust)
-        print(happyBright, surprisedBright, neutralBright, sadBright, contemptBright, angerBright, fearBright,
-              disgustBright)
-        print(speedValue)
+        #print(happy, surprised, neutral, sad, contempt, anger, fear, disgust)
+        #print(happyBright, surprisedBright, neutralBright, sadBright, contemptBright, angerBright, fearBright, disgustBright)
+        #print(speedValue)
+
+    def previewOpen(self):
+        preview = previewDialog()
+        preview.exec_()
 
 class successDialog(QDialog):
 
@@ -532,10 +510,5 @@ dashboard.speedSlider.sliderReleased.connect(dashboard.playSpeed)
 
 status = successDialog()
 dashboard.finishButton.clicked.connect(status.show)
-
-preview = previewDialog()
-
-dashboard.speedSlider.sliderReleased.connect(dashboard.previewLight)
-dashboard.previewButton.clicked.connect(preview.show)
 
 app.exec_()

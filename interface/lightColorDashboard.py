@@ -2703,7 +2703,7 @@ class Ui_lightColor(object):
         self.speedSlider = QSlider(self.centralwidget)
         self.speedSlider.setObjectName(u"speedSlider")
         self.speedSlider.setGeometry(QRect(10, 410, 381, 22))
-        self.speedSlider.setMinimum(100)
+        self.speedSlider.setMinimum(1)
         self.speedSlider.setMaximum(1000)
         self.speedSlider.setSingleStep(100)
         self.speedSlider.setOrientation(Qt.Horizontal)
