@@ -1,9 +1,7 @@
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
-import json
 import cv2 as cv
-import numpy as np
 import sys
 from interface.startpage import Ui_StartPage
 from interface.readCamera import MainApp
@@ -21,7 +19,6 @@ class mainWindow(QMainWindow, Ui_StartPage):
         super().__init__(parent)
         self.setupUi(self)
         print("Initialize")
-
 
 class cameraWindow(MainApp):
 
