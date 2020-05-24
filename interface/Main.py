@@ -310,16 +310,7 @@ class colorDashboard(QMainWindow, Ui_lightColor):
         pictureGenerate.preview(output, size)
 
     def finishEditing(self):
-        r = requests.get('http://10.0.0.33/W')
-        time.sleep(0.1)
-        r = requests.get('http://10.0.0.33/W')
-        r = requests.get('http://10.0.0.33/D')
         generate.finalout(output)
-        r = requests.get('http://10.0.0.33/D')
-        # Click 'Finish' button to upload the parameters, meanwhile opening dialog to indicate upload successfully
-        #print(happy, surprised, neutral, sad, contempt, anger, fear, disgust)
-        #print(happyBright, surprisedBright, neutralBright, sadBright, contemptBright, angerBright, fearBright, disgustBright)
-        #print(speedValue)
 
     def previewOpen(self):
         preview = previewDialog()

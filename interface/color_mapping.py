@@ -1,7 +1,8 @@
 import json
 import cv2 as cv
 import numpy as np
-import serial
+import requests
+import time
 
 class generate:
 
@@ -31,7 +32,7 @@ class generate:
         for i in range(counter):
             emotion[i][0] = data[i]['faceAttributes']['emotion']['happiness'] * saturate[0]
             emotion[i][1] = data[i]['faceAttributes']['emotion']['surprise'] * saturate[1]
-            emotion[i][2] = data[i]['faceAttributes']['emotion']['neutral'] * saturate[2]
+            emotion[i][2] = data[i]['faceAttributes']['emotion']['neutral'] * saturate[2]*0.1
             emotion[i][3] = data[i]['faceAttributes']['emotion']['sadness'] * saturate[3]
             emotion[i][4] = data[i]['faceAttributes']['emotion']['contempt'] * saturate[4]
             emotion[i][5] = data[i]['faceAttributes']['emotion']['anger'] * saturate[5]
@@ -132,6 +133,32 @@ class generate:
         #cv.imshow('image', img)
         cv.imwrite('imageGenerated.jpg', img)
         #cv.waitKey(0)
+
+    def OutString(i):
+        if i > 99:
+            return str(i)
+        if i < 10:
+            return "00" + str()
+        if i > 10 & i < 100:
+            return "0" + str(i)
+
+
+    def finalout(result):
+        r = requests.get('http://10.0.0.33/W')
+        time.sleep(0.1)
+        r = requests.get('http://10.0.0.33/D')
+        time.sleep(0.1)
+        r = requests.get('http://10.0.0.33/W')
+        url = "http://10.0.0.33/"
+        finder = "_light"
+        for i in range(len(result)):
+            red = generate.OutString(result[i][2])
+            green = generate.OutString(result[i][1])
+            blue = generate.OutString(result[i][0])
+            send = url + red + '_' + green + '_' + blue + finder
+            r = requests.post(send)
+            time.sleep(result[i][3] / 1000)
+        r = requests(url+"000_000_000_light")
 
 
 
