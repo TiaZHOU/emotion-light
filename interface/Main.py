@@ -34,7 +34,36 @@ class cameraWindow(MainApp):
     def capturePicture(self):
         print("Pressed")
         self.startRecognition()
+        self.startRecording.setEnabled(False)
+        self.Upload.setEnabled(True)
+        self.Upload.setStyleSheet(u"QPushButton {color: #333;\n"
+                                          "border: 2px solid #555;\n"
+                                          "border-radius: 11px;\n"
+                                          "padding: 5px;\n"
+                                          "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                          "fx: 0.3, fy: -0.4,\n"
+                                          "radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
+                                          "min-width: 80px;\n"
+                                          "}\n"
+                                          "\n"
+                                          "QPushButton:hover {\n"
+                                          "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                          "fx: 0.3, fy: -0.4,\n"
+                                          "radius: 1.35, stop: 0 #fff, stop: 1 #bbb);\n"
+                                          "}\n"
+                                          "\n"
+                                          "QPushButton:pressed {\n"
+                                          "background: qradialgradient(cx: 0.4, cy: -0.1,\n"
+                                          "fx: 0.4, fy: -0.1,\n"
+                                          "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
+                                          "}")
+        self.startRecording.setStyleSheet(u"QPushButton {color: #333;\n"
+                                          "border: 2px solid #555;\n"
+                                          "border-radius: 11px;\n"
+                                          "padding: 5px;\n"
+                                          "background: #333\n")
         pass
+
 
     def uploadPicture(self):
         collectedEmmotions = self.stopRecognition()

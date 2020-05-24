@@ -2935,8 +2935,8 @@ class Ui_lightColor(object):
         self.disgustRed.setText("")
         self.disgust.setText(QCoreApplication.translate("lightColor", u"DISGUST", None))
         self.displaySpeed.setText(QCoreApplication.translate("lightColor", u"DISPLAY SPEED", None))
-        self.previewButton.setText(QCoreApplication.translate("lightColor", u"Preview", None))
-        self.finishButton.setText(QCoreApplication.translate("lightColor", u"Finish", None))
+        self.previewButton.setText(QCoreApplication.translate("lightColor", u"Open Light Projection Preview", None))
+        self.finishButton.setText(QCoreApplication.translate("lightColor", u"Start Light Projections", None))
         self.label.setText(QCoreApplication.translate("lightColor", u"0", None))
         self.label_2.setText(QCoreApplication.translate("lightColor", u"x", None))
     # retranslateUi

@@ -24,7 +24,7 @@ class MainApp(QWidget):
         self.image_label = QLabel()
         self.image_label.setFixedSize(self.video_size)
 
-        self.startRecording = QPushButton("Start Recording")
+        self.startRecording = QPushButton("Start Emotion Recognition")
         self.startRecording.setObjectName(u"startRecording")
         self.startRecording.setGeometry(QRect(220, 530, 121, 41))
         self.startRecording.setStyleSheet(u"QPushButton {color: #333;\n"
@@ -48,15 +48,16 @@ class MainApp(QWidget):
                                           "fx: 0.4, fy: -0.1,\n"
                                           "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
                                           "}")
-        self.Upload = QPushButton("Upload")
+        self.Upload = QPushButton("Finish Recognition And Go To Color Mapping")
+        self.Upload.setEnabled(False)
         self.Upload.setObjectName(u"Upload")
         self.Upload.setGeometry(QRect(460, 530, 121, 41))
         self.Upload.setStyleSheet(u"QPushButton {color: #333;\n"
                                   "border: 2px solid #555;\n"
                                   "border-radius: 11px;\n"
                                   "padding: 5px;\n"
-                                  "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
-                                  "fx: 0.3, fy: -0.4,\n"
+                                  "background: #333;\n"
+                                  "fx: 2.3, fy: -2.4,\n"
                                   "radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
                                   "min-width: 80px;\n"
                                   "}\n"
