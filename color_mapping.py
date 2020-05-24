@@ -1,7 +1,8 @@
 import json
 import cv2 as cv
 import numpy as np
-import serial
+import requests
+import time
 
 
 # store color results into .txt
@@ -38,6 +39,8 @@ def read_emotion(saturate):
         emotion[i][7] = data[i]['faceAttributes']['emotion']['disgust'] * saturate[7]
     print('total ' + counter.__str__() + ' pictures are send')
     return emotion
+
+
 '''
 pos 0   "anger"         num 0   "red"
 pos 1   "contempt"      num 1   "orange"
@@ -123,18 +126,42 @@ def preview(output_list, size):
         ptStart = (pos, 00)
         ptEnd = (pos, 30)
         point_color = (output_list[i][0], output_list[i][1], output_list[i][2])  # BGR
-        thickness = int(200/size)
+        thickness = int(200 / size)
         lineType = 5
         pos = pos + thickness
         cv.line(img, ptStart, ptEnd, point_color, thickness, lineType)
-    #cv.namedWindow("image")
-    #cv.imshow('image', img)
-    cv.imwrite('preview.jpg',img)
+    # cv.namedWindow("image")
+    # cv.imshow('image', img)
+    cv.imwrite('preview.jpg', img)
 
+
+def OutString(i):
+    if i > 99:
+        return str(i)
+    if i < 10:
+        return "00"+str()
+    if i >10 & i <100:
+        return "0"+str(i)
+
+def finalout(result):
+    r = requests.get('http://10.0.0.33/W')
+    time.sleep(0.1)
+    r = requests.get('http://10.0.0.33/D')
+    time.sleep(0.1)
+    r = requests.get('http://10.0.0.33/W')
+    url = "http://10.0.0.33/"
+    finder = "_light"
+    for i in range(len(result)):
+        red = OutString(result[i][0])
+        green = OutString(result[i][1])
+        blue = OutString(result[i][2])
+        send = url + red + '_'+green +'_' + blue + finder
+        r = requests.post(send)
+        time.sleep(result[i][3]/1000)
 
 # main begin
-model = [1, 2, 3, 4, 4, 4, 7, 1]  # initial color model, numbers refer to colors, positions refer to emotions
-saturate = [0.49, 1, 0.08, 1, 0.27, 1, 0.12, 0.9]
+model = [1, 2, 3, 4, 5, 6, 7, 8]  # initial color model, numbers refer to colors, positions refer to emotions
+saturate = [0.49, 1, 0.8, 1, 0.57, 1, 0.3, 0.9]
 speed = 10
 # colors explain
 '''
@@ -172,35 +199,12 @@ for i in range(len(color_list)):
     output[i][0] = int(clA[0][0][0].astype(str))
     output[i][1] = int(clA[0][0][1].astype(str))
     output[i][2] = int(clA[0][0][2].astype(str))
-    output[i][3] = int(1000/speed)
+    output[i][3] = int(1000 / speed)
     print(output[i])  # final result RGB code
-    #display[i] = create_image(r=clA[i][0][0], g=clA[i][0][1], b=clA[i][0][2])
+    # display[i] = create_image(r=clA[i][0][0], g=clA[i][0][1], b=clA[i][0][2])
     # ser = serial.Serial("COM5", 9600, timeout=5)
 # TODO transfer the result into Arduino kit
 size = len(output)
 preview(output, size)
-#store(output)
-# number info
-'''
-color_list[0][0]  # pos 5 in first pic, refer to neutral
-color_list[0][1]  # pos 6 in first pic, refer to sadness
 
-model[color_list[0][0]] # num 5 refer color5
-model[color_list[0][1]] # num 6 refer color6
-'''
-
-# display testing code
-'''
-cl11 = color_pick(model[color_list[0][0]])  
-cl12 = color_pick(model[color_list[0][1]])
-cl21 = color_pick(model[color_list[1][0]])
-cl22 = color_pick(model[color_list[1][1]])
-
-clA = cv.addWeighted(cl11, emotion[0][color_list[0][0]], cl12, emotion[0][color_list[0][1]], 0)
-clB = cv.addWeighted(cl21, emotion[1][color_list[1][0]], cl22, emotion[1][color_list[1][1]], 0)
-# print(clA[0][0])
-# print(clB[0][0])
-cv.imshow('clA', clA)
-cv.imshow('clB', clB)
-cv.waitKey(0)
-'''
+finalout(output)
