@@ -15,7 +15,7 @@ from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
     QPixmap, QRadialGradient)
 from PySide2.QtWidgets import *
 
-import pictures_rc
+import interface.pictures_rc
 
 class Ui_StartPage(object):
     def setupUi(self, StartPage):

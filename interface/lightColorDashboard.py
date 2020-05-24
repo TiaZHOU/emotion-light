@@ -2703,7 +2703,7 @@ class Ui_lightColor(object):
         self.speedSlider = QSlider(self.centralwidget)
         self.speedSlider.setObjectName(u"speedSlider")
         self.speedSlider.setGeometry(QRect(10, 410, 381, 22))
-        self.speedSlider.setMinimum(100)
+        self.speedSlider.setMinimum(1)
         self.speedSlider.setMaximum(1000)
         self.speedSlider.setSingleStep(100)
         self.speedSlider.setOrientation(Qt.Horizontal)
@@ -2712,7 +2712,8 @@ class Ui_lightColor(object):
         self.displaySpeed.setGeometry(QRect(20, 370, 121, 16))
         self.previewButton = QPushButton(self.centralwidget)
         self.previewButton.setObjectName(u"previewButton")
-        self.previewButton.setGeometry(QRect(430, 490, 112, 41))
+        self.previewButton.setGeometry(QRect(150, 490, 112, 41))
+        self.previewButton.resize(210,50)
         self.previewButton.setStyleSheet(u"QPushButton {color: #333;\n"
 "border: 2px solid #555;\n"
 "border-radius: 11px;\n"
@@ -2736,7 +2737,8 @@ class Ui_lightColor(object):
 "}")
         self.finishButton = QPushButton(self.centralwidget)
         self.finishButton.setObjectName(u"finishButton")
-        self.finishButton.setGeometry(QRect(600, 490, 112, 41))
+        self.finishButton.setGeometry(QRect(450, 490, 112, 41))
+        self.finishButton.resize(210,50)
         self.finishButton.setStyleSheet(u"QPushButton {color: #333;\n"
 "border: 2px solid #555;\n"
 "border-radius: 11px;\n"
@@ -2935,8 +2937,8 @@ class Ui_lightColor(object):
         self.disgustRed.setText("")
         self.disgust.setText(QCoreApplication.translate("lightColor", u"DISGUST", None))
         self.displaySpeed.setText(QCoreApplication.translate("lightColor", u"DISPLAY SPEED", None))
-        self.previewButton.setText(QCoreApplication.translate("lightColor", u"Preview", None))
-        self.finishButton.setText(QCoreApplication.translate("lightColor", u"Finish", None))
+        self.previewButton.setText(QCoreApplication.translate("lightColor", u"Open Light Projection Preview", None))
+        self.finishButton.setText(QCoreApplication.translate("lightColor", u"Start Light Projections", None))
         self.label.setText(QCoreApplication.translate("lightColor", u"0", None))
         self.label_2.setText(QCoreApplication.translate("lightColor", u"x", None))
     # retranslateUi

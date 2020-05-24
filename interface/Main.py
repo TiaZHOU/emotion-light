@@ -1,14 +1,16 @@
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
-import json
 import cv2 as cv
-import numpy as np
 import sys
-from startpage import Ui_StartPage
-from readCamera import MainApp
-from lightColorDashboard import Ui_lightColor
-from color_mapping  import generate
+from interface.startpage import Ui_StartPage
+from interface.readCamera import MainApp
+from interface.lightColorDashboard import Ui_lightColor
+from interface.color_mapping import generate
+import json
+from recognition.captureAndRecognize import CaptureRecognize
+
+
 
 
 class mainWindow(QMainWindow, Ui_StartPage):
@@ -16,6 +18,7 @@ class mainWindow(QMainWindow, Ui_StartPage):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+        print("Initialize")
 
 class cameraWindow(MainApp):
 
@@ -23,17 +26,49 @@ class cameraWindow(MainApp):
         QWidget.__init__(self)
         self.video_size = QSize(800, 500)
         self.setup_ui()
+        # TODO: intialize the camera and provide reference to setup .setup camera
+        # starts camera
         self.setup_camera()
 
+
     def capturePicture(self):
-        # Click the 'Start Recording" button
-        # The Azure camera should be connected and capture pictures and save them into a file
+        print("Pressed")
+        self.startRecognition()
+        self.startRecording.setEnabled(False)
+        self.Upload.setEnabled(True)
+        self.Upload.setStyleSheet(u"QPushButton {color: #333;\n"
+                                          "border: 2px solid #555;\n"
+                                          "border-radius: 11px;\n"
+                                          "padding: 5px;\n"
+                                          "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                          "fx: 0.3, fy: -0.4,\n"
+                                          "radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
+                                          "min-width: 80px;\n"
+                                          "}\n"
+                                          "\n"
+                                          "QPushButton:hover {\n"
+                                          "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                          "fx: 0.3, fy: -0.4,\n"
+                                          "radius: 1.35, stop: 0 #fff, stop: 1 #bbb);\n"
+                                          "}\n"
+                                          "\n"
+                                          "QPushButton:pressed {\n"
+                                          "background: qradialgradient(cx: 0.4, cy: -0.1,\n"
+                                          "fx: 0.4, fy: -0.1,\n"
+                                          "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
+                                          "}")
+        self.startRecording.setStyleSheet(u"QPushButton {color: #333;\n"
+                                          "border: 2px solid #555;\n"
+                                          "border-radius: 11px;\n"
+                                          "padding: 5px;\n"
+                                          "background: #333\n")
         pass
 
+
     def uploadPicture(self):
-        # Click the 'Upload" button
-        # The pictures will be uploaded and processed by emotion recognition to generate results with level
-        # The dashboard should be activated
+        collectedEmmotions = self.stopRecognition()
+        with open('result', 'w', encoding='utf-8') as f:
+            json.dump(collectedEmmotions, f, ensure_ascii=False, indent=4)
         pass
 
 class colorDashboard(QMainWindow, Ui_lightColor):
@@ -41,8 +76,10 @@ class colorDashboard(QMainWindow, Ui_lightColor):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+
+        self.previewButton.clicked.connect(self.previewLight)
+        self.previewButton.clicked.connect(self.previewOpen)
         self.finishButton.clicked.connect(self.finishEditing)
-        #self.previewButton.clicked.connect(self.previewLight)
 
     def happyColor(self):
         # The color selected for each emotion will be transmitted in the format of RGB
@@ -233,20 +270,11 @@ class colorDashboard(QMainWindow, Ui_lightColor):
     def previewLight(self):
         # main begin
         pictureGenerate = generate()
-        model = [1, 2, 3, 4, 4, 4, 7, 1]  # initial color model, numbers refer to colors, positions refer to emotions
-        saturate = [0.49, 1, 0.08, 1, 0.27, 1, 0.12, 0.9]
-        speed = 10
-        # colors explain
-        '''
-        pos 0   "anger"         num 0   "red"
-        pos 1   "contempt"      num 1   "orange"
-        pos 2   "disgust"       num 2   "yellow"
-        pos 3   "fear"          num 3   "green"
-        pos 4   "happiness"     num 4   "cyan"
-        pos 5   "neutral"       num 5   "blue"
-        pos 6   "sadness"       num 6   "purple"
-        pos 7   "surprise"      num 7   "white"
-        '''
+        model = [happy, surprised, neutral, sad, contempt, anger, fear,
+                 disgust]  # initial color model, numbers refer to colors, positions refer to emotions
+        saturate = [happyBright, surprisedBright, neutralBright, sadBright, contemptBright, angerBright, fearBright,
+                    disgustBright]
+        speed = speedValue
 
         emotion = generate.read_emotion(saturate)
         # emotion = set_saturate(saturate, emotion)
@@ -260,6 +288,7 @@ class colorDashboard(QMainWindow, Ui_lightColor):
 
         # generate two pic then merge on weight
         #
+        global output
         output = [[0 for i in range(4)] for i in range(len(color_list))]
         display = [0 for i in range(len(color_list))]
         for i in range(len(color_list)):
@@ -279,38 +308,22 @@ class colorDashboard(QMainWindow, Ui_lightColor):
         # TODO transfer the result into Arduino kit
         size = len(output)
         pictureGenerate.preview(output, size)
-        # store(output)
-        # number info
-        '''
-        color_list[0][0]  # pos 5 in first pic, refer to neutral
-        color_list[0][1]  # pos 6 in first pic, refer to sadness
-
-        model[color_list[0][0]] # num 5 refer color5
-        model[color_list[0][1]] # num 6 refer color6
-        '''
-
-        # display testing code
-        '''
-        cl11 = color_pick(model[color_list[0][0]])  
-        cl12 = color_pick(model[color_list[0][1]])
-        cl21 = color_pick(model[color_list[1][0]])
-        cl22 = color_pick(model[color_list[1][1]])
-
-        clA = cv.addWeighted(cl11, emotion[0][color_list[0][0]], cl12, emotion[0][color_list[0][1]], 0)
-        clB = cv.addWeighted(cl21, emotion[1][color_list[1][0]], cl22, emotion[1][color_list[1][1]], 0)
-        # print(clA[0][0])
-        # print(clB[0][0])
-        cv.imshow('clA', clA)
-        cv.imshow('clB', clB)
-        cv.waitKey(0)
-        '''
 
     def finishEditing(self):
+        r = requests.get('http://10.0.0.33/W')
+        time.sleep(0.1)
+        r = requests.get('http://10.0.0.33/W')
+        r = requests.get('http://10.0.0.33/D')
+        generate.finalout(output)
+        r = requests.get('http://10.0.0.33/D')
         # Click 'Finish' button to upload the parameters, meanwhile opening dialog to indicate upload successfully
-        print(happy, surprised, neutral, sad, contempt, anger, fear, disgust)
-        print(happyBright, surprisedBright, neutralBright, sadBright, contemptBright, angerBright, fearBright,
-              disgustBright)
-        print(speedValue)
+        #print(happy, surprised, neutral, sad, contempt, anger, fear, disgust)
+        #print(happyBright, surprisedBright, neutralBright, sadBright, contemptBright, angerBright, fearBright, disgustBright)
+        #print(speedValue)
+
+    def previewOpen(self):
+        preview = previewDialog()
+        preview.exec_()
 
 class successDialog(QDialog):
 
@@ -425,14 +438,18 @@ class previewDialog(QDialog):
 app = QApplication(sys.argv)
 form=mainWindow()
 form.show()
-
+#
 camera = cameraWindow()
 form.started.clicked.connect(camera.show)
 form.started.clicked.connect(form.close)
 
 dashboard = colorDashboard()
+camera.Upload.clicked.connect(camera.uploadPicture)
 camera.Upload.clicked.connect(dashboard.show)
 camera.Upload.clicked.connect(camera.close)
+# clicked the start recording button to call the method
+camera.startRecording.clicked.connect(camera.capturePicture)
+
 
 dashboard.happyRed.clicked.connect(dashboard.happyColor)
 dashboard.happyYellow.clicked.connect(dashboard.happyColor)
@@ -519,10 +536,5 @@ dashboard.speedSlider.sliderReleased.connect(dashboard.playSpeed)
 
 status = successDialog()
 dashboard.finishButton.clicked.connect(status.show)
-
-preview = previewDialog()
-
-dashboard.speedSlider.sliderReleased.connect(dashboard.previewLight)
-dashboard.previewButton.clicked.connect(preview.show)
 
 app.exec_()
