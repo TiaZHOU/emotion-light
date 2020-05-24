@@ -2712,7 +2712,8 @@ class Ui_lightColor(object):
         self.displaySpeed.setGeometry(QRect(20, 370, 121, 16))
         self.previewButton = QPushButton(self.centralwidget)
         self.previewButton.setObjectName(u"previewButton")
-        self.previewButton.setGeometry(QRect(430, 490, 112, 41))
+        self.previewButton.setGeometry(QRect(150, 490, 112, 41))
+        self.previewButton.resize(210,50)
         self.previewButton.setStyleSheet(u"QPushButton {color: #333;\n"
 "border: 2px solid #555;\n"
 "border-radius: 11px;\n"
@@ -2736,7 +2737,8 @@ class Ui_lightColor(object):
 "}")
         self.finishButton = QPushButton(self.centralwidget)
         self.finishButton.setObjectName(u"finishButton")
-        self.finishButton.setGeometry(QRect(600, 490, 112, 41))
+        self.finishButton.setGeometry(QRect(450, 490, 112, 41))
+        self.finishButton.resize(210,50)
         self.finishButton.setStyleSheet(u"QPushButton {color: #333;\n"
 "border: 2px solid #555;\n"
 "border-radius: 11px;\n"
