@@ -10,20 +10,16 @@ class CaptureRecognize:
 
 
     def mainProcess(self):
-
-        print("Enter s to begin, q to end")
-        inputStr = input()
-        video_getter = None
-        if inputStr == "s":
             print("Selected capturing")
             try:
                 video_getter = VideoGet().start()
                 flag = False
                 while flag == False:
-                    secondInput = input()
-                    if secondInput:
-                        video_getter.stop()
+                    secondInput = "lalala"
+                    if not secondInput:
+                        collectedData = video_getter.stop()
                         flag = True
+                        return collectedData
 
                     else:
                         continue
@@ -79,7 +75,7 @@ class VideoGet:
         print(self.collectedData)
         return self.collectedData
 
-    def processInAzure(image, collectedData):
+    def processInAzure(self ,image, collectedData):
         img = cv2.imencode('.jpg', image)[1].tostring()
         # set to your own subscription key value
         subscription_key = "5ed36051fd474aed83e7c35c15cd17c3"
@@ -100,6 +96,3 @@ class VideoGet:
         gotBack = (json.dumps(response.json()))
         print(gotBack)
         collectedData.append(gotBack)
-
-
-ed = CaptureRecognize.mainProcess()

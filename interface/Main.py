@@ -9,6 +9,10 @@ from interface.startpage import Ui_StartPage
 from interface.readCamera import MainApp
 from interface.lightColorDashboard import Ui_lightColor
 from interface.color_mapping import generate
+import json
+from recognition.captureAndRecognize import CaptureRecognize
+
+
 
 
 class mainWindow(QMainWindow, Ui_StartPage):
@@ -16,6 +20,8 @@ class mainWindow(QMainWindow, Ui_StartPage):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+        print("Initialize")
+
 
 class cameraWindow(MainApp):
 
@@ -23,17 +29,20 @@ class cameraWindow(MainApp):
         QWidget.__init__(self)
         self.video_size = QSize(800, 500)
         self.setup_ui()
+        # TODO: intialize the camera and provide reference to setup .setup camera
+        # starts camera
         self.setup_camera()
 
+
     def capturePicture(self):
-        # Click the 'Start Recording" button
-        # The Azure camera should be connected and capture pictures and save them into a file
+        print("Pressed")
+        self.startRecognition()
         pass
 
     def uploadPicture(self):
-        # Click the 'Upload" button
-        # The pictures will be uploaded and processed by emotion recognition to generate results with level
-        # The dashboard should be activated
+        collectedEmmotions = self.stopRecognition()
+        with open('result', 'w', encoding='utf-8') as f:
+            json.dump(collectedEmmotions, f, ensure_ascii=False, indent=4)
         pass
 
 class colorDashboard(QMainWindow, Ui_lightColor):
@@ -425,14 +434,18 @@ class previewDialog(QDialog):
 app = QApplication(sys.argv)
 form=mainWindow()
 form.show()
-
+#
 camera = cameraWindow()
 form.started.clicked.connect(camera.show)
 form.started.clicked.connect(form.close)
 
 dashboard = colorDashboard()
+camera.Upload.clicked.connect(camera.uploadPicture)
 camera.Upload.clicked.connect(dashboard.show)
 camera.Upload.clicked.connect(camera.close)
+# clicked the start recording button to call the method
+camera.startRecording.clicked.connect(camera.capturePicture)
+
 
 dashboard.happyRed.clicked.connect(dashboard.happyColor)
 dashboard.happyYellow.clicked.connect(dashboard.happyColor)

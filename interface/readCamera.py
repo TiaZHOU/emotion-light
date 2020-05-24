@@ -2,13 +2,18 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 import cv2
+from recognition.noStreamCapture import VideoGet
 
 
 class MainApp(QWidget):
 
+    def __init__(self, parent, PySide2_QtWidgets_QWidget=None, NoneType=None, *args, **kwargs):
+        super().__init__(parent, PySide2_QtWidgets_QWidget=None, NoneType=None, *args, **kwargs)
+
     def setup_ui(self):
         """Initialize widgets.
         """
+        self.isRecognitionOn = False
         self.setStyleSheet(u"background-color: rgb(111, 112, 112);")
         self.resize(800, 600)
         self.emotionlight = QLabel("Emotion Light")
@@ -81,6 +86,7 @@ class MainApp(QWidget):
         """
         self.capture = cv2.VideoCapture(0)
         self.timer = QTimer()
+        self.recognition = VideoGet(self.capture)
         self.timer.timeout.connect(self.display_video_stream)
         self.timer.start(30)
 
@@ -88,9 +94,16 @@ class MainApp(QWidget):
         """Read frame from camera and repaint QLabel widget.
         """
         _, frame = self.capture.read()
+
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame = cv2.flip(frame, 1)
-        image = QImage(frame, frame.shape[1], frame.shape[0], 
+        image = QImage(frame, frame.shape[1], frame.shape[0],
                        frame.strides[0], QImage.Format_RGB888)
         self.image_label.setPixmap(QPixmap.fromImage(image))
 
+    def stopRecognition(self):
+       return self.recognition.stop()
+
+
+    def startRecognition(self):
+        self.recognition.start()
