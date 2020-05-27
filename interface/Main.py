@@ -30,6 +30,37 @@ class cameraWindow(MainApp):
         # starts camera
         self.setup_camera()
 
+    def reverseButtons(self):
+        self.Upload.setEnabled(False)
+        self.Upload.setStyleSheet(u"QPushButton {color: #333;\n"
+                                          "border: 2px solid #555;\n"
+                                          "border-radius: 11px;\n"
+                                          "padding: 5px;\n"
+                                          "background: #333\n")
+        self.startRecording.setEnabled(True)
+        self.startRecording.setStyleSheet(u"QPushButton {color: #333;\n"
+                                  "border: 2px solid #555;\n"
+                                  "border-radius: 11px;\n"
+                                  "padding: 5px;\n"
+                                  "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                  "fx: 0.3, fy: -0.4,\n"
+                                  "radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
+                                  "min-width: 80px;\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:hover {\n"
+                                  "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                  "fx: 0.3, fy: -0.4,\n"
+                                  "radius: 1.35, stop: 0 #fff, stop: 1 #bbb);\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:pressed {\n"
+                                  "background: qradialgradient(cx: 0.4, cy: -0.1,\n"
+                                  "fx: 0.4, fy: -0.1,\n"
+                                  "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
+                                  "}")
+
+
 
     def capturePicture(self):
         print("Pressed")
@@ -69,7 +100,11 @@ class cameraWindow(MainApp):
         collectedEmmotions = self.stopRecognition()
         with open('result', 'w', encoding='utf-8') as f:
             json.dump(collectedEmmotions, f, ensure_ascii=False, indent=4)
+        self.reverseButtons()
+        self.close()
         pass
+
+
 
 class colorDashboard(QMainWindow, Ui_lightColor):
 
@@ -429,6 +464,7 @@ class previewDialog(QDialog):
 app = QApplication(sys.argv)
 form=mainWindow()
 form.show()
+
 #
 camera = cameraWindow()
 form.started.clicked.connect(camera.show)
@@ -437,7 +473,7 @@ form.started.clicked.connect(form.close)
 dashboard = colorDashboard()
 camera.Upload.clicked.connect(camera.uploadPicture)
 camera.Upload.clicked.connect(dashboard.show)
-camera.Upload.clicked.connect(camera.close)
+
 # clicked the start recording button to call the method
 camera.startRecording.clicked.connect(camera.capturePicture)
 

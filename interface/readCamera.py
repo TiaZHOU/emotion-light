@@ -87,7 +87,6 @@ class MainApp(QWidget):
         """
         self.capture = cv2.VideoCapture(0)
         self.timer = QTimer()
-        self.recognition = VideoGet(self.capture)
         self.timer.timeout.connect(self.display_video_stream)
         self.timer.start(30)
 
@@ -107,4 +106,5 @@ class MainApp(QWidget):
 
 
     def startRecognition(self):
+        self.recognition = VideoGet(self.capture)
         self.recognition.start()
