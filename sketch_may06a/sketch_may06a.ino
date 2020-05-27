@@ -30,8 +30,8 @@ boolean reading = false;
 String myStr;
 int redVal, greenVal, blueVal;
 
-char ssid[] = "Belong1CBF9F"; //  your network SSID (name)
-char pass[] = "azte3gnkfqpd"; // your network password
+char ssid[] = "TerryOP6"; //  your network SSID (name)
+char pass[] = "19950727"; // your network password
 int keyIndex = 0;                 // your network key Index number (needed only for WEP)
 int ledpin = 6;
 bool val = true;
@@ -139,7 +139,7 @@ void loop() {
   int x = Lines.indexOf("_light");
   if (x != -1){
       if(Lines.endsWith("_light")){
-        Serial.print("`````get the end of RGB!!!``````` ");
+        //Serial.print("`````get the end of RGB!!!``````` ");
         Serial.print(Lines);
         r = Lines.substring(6,9).toInt();
         g = Lines.substring(10,13).toInt();
