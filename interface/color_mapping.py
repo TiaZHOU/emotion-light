@@ -1,7 +1,8 @@
 import json
 import cv2 as cv
 import numpy as np
-import serial
+import requests
+import time
 
 class generate:
 
@@ -14,7 +15,6 @@ class generate:
                 file.write(' ')
             file.write('\n')
         file.close()
-
 
     # load json data from file
     # read data from .json file from azure
@@ -31,7 +31,7 @@ class generate:
         for i in range(counter):
             emotion[i][0] = data[i]['faceAttributes']['emotion']['happiness'] * saturate[0]
             emotion[i][1] = data[i]['faceAttributes']['emotion']['surprise'] * saturate[1]
-            emotion[i][2] = data[i]['faceAttributes']['emotion']['neutral'] * saturate[2]
+            emotion[i][2] = data[i]['faceAttributes']['emotion']['neutral'] * saturate[2]*0.5
             emotion[i][3] = data[i]['faceAttributes']['emotion']['sadness'] * saturate[3]
             emotion[i][4] = data[i]['faceAttributes']['emotion']['contempt'] * saturate[4]
             emotion[i][5] = data[i]['faceAttributes']['emotion']['anger'] * saturate[5]
@@ -39,17 +39,6 @@ class generate:
             emotion[i][7] = data[i]['faceAttributes']['emotion']['disgust'] * saturate[7]
         print('total ' + counter.__str__() + ' pictures are send')
         return emotion
-    '''
-    pos 0   "anger"         num 0   "red"
-    pos 1   "contempt"      num 1   "orange"
-    pos 2   "disgust"       num 2   "yellow"
-    pos 3   "fear"          num 3   "green"
-    pos 4   "happiness"     num 4   "cyan"
-    pos 5   "neutral"       num 5   "blue"
-    pos 6   "sadness"       num 6   "purple"
-    pos 7   "surprise"      num 7   "white"
-    '''
-
 
     # sample for color display
     def create_image(self, g, b, r):
@@ -58,7 +47,6 @@ class generate:
         img[:, :, 1] = np.zeros([400, 400]) + g
         img[:, :, 2] = np.zeros([400, 400]) + r
         return img
-
 
     def color_pick(self, color_num):
         color0_red = self.create_image(r=255, g=0, b=0)
@@ -86,18 +74,15 @@ class generate:
         elif color_num == 8:
             return color7_purple
 
-
     # define function which user change color for specific emotion
     def color_change(formal_model, color, emo):
         formal_model[emo] = color
         return formal_model
 
-
     def set_saturate(saturate_list, emotion_list):
         for i in range(len(emotion_list)):
             emotion_list[i] = emotion_list[i] * saturate_list[i]
         return emotion_list
-
 
     def max_two_emo(emotion_result):
         set = [[0 for i in range(2)] for i in range(len(emotion_result))]
@@ -116,7 +101,6 @@ class generate:
                     counter2 = emotion_result[i][j]
         return set
 
-
     def preview(sel, output_list, size):
         pos = 0
         img = np.zeros((30, 200, 3), np.uint8)
@@ -132,6 +116,32 @@ class generate:
         #cv.imshow('image', img)
         cv.imwrite('imageGenerated.jpg', img)
         #cv.waitKey(0)
+
+    def OutString(i):
+        if i > 99:
+            return str(i)
+        if i < 10:
+            return "00" + str()
+        if i > 10 & i < 100:
+            return "0" + str(i)
+
+
+    def finalout(result):
+        url = "http://192.168.43.24/"
+        r = requests.get(url+'W')
+        time.sleep(0.05)
+        r = requests.getD(url+'D')
+        time.sleep(0.05)
+        r = requests.get(url+'W')
+        finder = "_light"
+        for i in range(len(result)):
+            red = generate.OutString(result[i][2])
+            green = generate.OutString(result[i][1])
+            blue = generate.OutString(result[i][0])
+            send = url + red + '_' + green + '_' + blue + finder
+            r = requests.post(send)
+            time.sleep(result[i][3] / 1000)
+        r = requests(url+"000_000_000_light")
 
 
 
