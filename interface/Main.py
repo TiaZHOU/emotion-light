@@ -8,7 +8,6 @@ from interface.readCamera import MainApp
 from interface.lightColorDashboard import Ui_lightColor
 from interface.color_mapping import generate
 import json
-from recognition.captureAndRecognize import CaptureRecognize
 
 
 
