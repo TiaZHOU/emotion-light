@@ -10,6 +10,7 @@ class generate:
     def read_emotion(saturate):
         with open('result', 'r') as f:
             data = json.load(f)
+        f.close();
         # count how many face
         counter = 0
         for key in data:
@@ -129,6 +130,7 @@ class generate:
             blue = generate.OutString(result[i][0])
             send = url + red + '_' + green + '_' + blue + finder
             r = requests.post(send)
+            print(send)
             time.sleep(result[i][3] / 1000)
         r = requests(url+"000_000_000_light")
 

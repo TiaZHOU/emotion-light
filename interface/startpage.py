@@ -15,7 +15,7 @@ from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
     QPixmap, QRadialGradient)
 from PySide2.QtWidgets import *
 
-import interface.pictures_rc
+import pictures_rc
 
 class Ui_StartPage(object):
     def setupUi(self, StartPage):
@@ -62,7 +62,7 @@ class Ui_StartPage(object):
         self.instruction = QLabel(self.centralwidget)
         self.instruction.setObjectName(u"instruction")
         self.instruction.setGeometry(QRect(0, 380, 461, 121))
-        self.instruction.setPixmap(QPixmap(u":/pictures/instruction.png"))
+        self.instruction.setPixmap(QPixmap(u":/pictures/new.png"))
         self.instruction.setScaledContents(True)
         StartPage.setCentralWidget(self.centralwidget)
 
@@ -72,7 +72,7 @@ class Ui_StartPage(object):
     # setupUi
 
     def retranslateUi(self, StartPage):
-        StartPage.setWindowTitle(QCoreApplication.translate("StartPage", u"Emotion Light", None))
+        StartPage.setWindowTitle(QCoreApplication.translate("StartPage", u"MainWindow", None))
         self.picture.setText("")
         self.emotionlight.setText(QCoreApplication.translate("StartPage", u"Emotion Light", None))
         self.started.setText(QCoreApplication.translate("StartPage", u"Get Started", None))

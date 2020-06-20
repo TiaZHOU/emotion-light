@@ -1,1 +1,102 @@
-[]
+[
+    {
+        "faceRectangle": {
+            "top": 175,
+            "left": 252,
+            "width": 91,
+            "height": 91
+        },
+        "faceAttributes": {
+            "emotion": {
+                "anger": 0.0,
+                "contempt": 0.002,
+                "disgust": 0.0,
+                "fear": 0.0,
+                "happiness": 0.0,
+                "neutral": 0.995,
+                "sadness": 0.003,
+                "surprise": 0.0
+            }
+        }
+    },
+    {
+        "faceRectangle": {
+            "top": 177,
+            "left": 256,
+            "width": 85,
+            "height": 85
+        },
+        "faceAttributes": {
+            "emotion": {
+                "anger": 0.0,
+                "contempt": 0.002,
+                "disgust": 0.0,
+                "fear": 0.0,
+                "happiness": 0.013,
+                "neutral": 0.983,
+                "sadness": 0.001,
+                "surprise": 0.0
+            }
+        }
+    },
+    {
+        "faceRectangle": {
+            "top": 174,
+            "left": 252,
+            "width": 94,
+            "height": 94
+        },
+        "faceAttributes": {
+            "emotion": {
+                "anger": 0.0,
+                "contempt": 0.009,
+                "disgust": 0.003,
+                "fear": 0.001,
+                "happiness": 0.096,
+                "neutral": 0.801,
+                "sadness": 0.017,
+                "surprise": 0.072
+            }
+        }
+    },
+    {
+        "faceRectangle": {
+            "top": 186,
+            "left": 251,
+            "width": 91,
+            "height": 91
+        },
+        "faceAttributes": {
+            "emotion": {
+                "anger": 0.0,
+                "contempt": 0.001,
+                "disgust": 0.0,
+                "fear": 0.0,
+                "happiness": 0.62,
+                "neutral": 0.379,
+                "sadness": 0.0,
+                "surprise": 0.0
+            }
+        }
+    },
+    {
+        "faceRectangle": {
+            "top": 191,
+            "left": 219,
+            "width": 78,
+            "height": 78
+        },
+        "faceAttributes": {
+            "emotion": {
+                "anger": 0.0,
+                "contempt": 0.0,
+                "disgust": 0.0,
+                "fear": 0.0,
+                "happiness": 0.0,
+                "neutral": 0.997,
+                "sadness": 0.003,
+                "surprise": 0.0
+            }
+        }
+    }
+]

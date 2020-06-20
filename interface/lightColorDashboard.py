@@ -2700,10 +2700,9 @@ class Ui_lightColor(object):
         self.disgustSlider.setGeometry(QRect(580, 270, 160, 22))
         self.disgustSlider.setMaximum(100)
         self.disgustSlider.setOrientation(Qt.Horizontal)
-
         self.finishButton = QPushButton(self.centralwidget)
         self.finishButton.setObjectName(u"finishButton")
-        self.finishButton.setGeometry(QRect(450, 490, 112, 41))
+        self.finishButton.setGeometry(QRect(300, 450, 112, 41))
         self.finishButton.resize(210,50)
         self.finishButton.setStyleSheet(u"QPushButton {color: #333;\n"
 "border: 2px solid #555;\n"

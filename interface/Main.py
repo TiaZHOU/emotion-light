@@ -111,7 +111,7 @@ class colorDashboard(QMainWindow, Ui_lightColor):
 
  #       self.previewButton.clicked.connect(self.previewLight)
   #      self.previewButton.clicked.connect(self.previewOpen)
-        self.finishButton.clicked.connect(self.finishEditing)
+  #      self.finishButton.clicked.connect(self.finishEditing)
 
     def happyColor(self):
         # The color selected for each emotion will be transmitted in the format of RGB
@@ -337,12 +337,8 @@ class colorDashboard(QMainWindow, Ui_lightColor):
             print(output[i])  # final result RGB code
             # display[i] = create_image(r=clA[i][0][0], g=clA[i][0][1], b=clA[i][0][2])
             # ser = serial.Serial("COM5", 9600, timeout=5)
-        # TODO transfer the result into Arduino kit
-        size = len(output)
-        pictureGenerate.preview(output, size)
-
-    def finishEditing(self):
         generate.finalout(output)
+
 
     def previewOpen(self):
         preview = previewDialog()
@@ -473,7 +469,6 @@ camera.Upload.clicked.connect(dashboard.show)
 
 # clicked the start recording button to call the method
 camera.startRecording.clicked.connect(camera.capturePicture)
-
 
 dashboard.happyRed.clicked.connect(dashboard.happyColor)
 dashboard.happyYellow.clicked.connect(dashboard.happyColor)
