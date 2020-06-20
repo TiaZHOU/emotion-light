@@ -2700,41 +2700,7 @@ class Ui_lightColor(object):
         self.disgustSlider.setGeometry(QRect(580, 270, 160, 22))
         self.disgustSlider.setMaximum(100)
         self.disgustSlider.setOrientation(Qt.Horizontal)
-        self.speedSlider = QSlider(self.centralwidget)
-        self.speedSlider.setObjectName(u"speedSlider")
-        self.speedSlider.setGeometry(QRect(10, 410, 381, 22))
-        self.speedSlider.setMinimum(1)
-        self.speedSlider.setMaximum(1000)
-        self.speedSlider.setSingleStep(100)
-        self.speedSlider.setOrientation(Qt.Horizontal)
-        self.displaySpeed = QLabel(self.centralwidget)
-        self.displaySpeed.setObjectName(u"displaySpeed")
-        self.displaySpeed.setGeometry(QRect(20, 370, 121, 16))
-        self.previewButton = QPushButton(self.centralwidget)
-        self.previewButton.setObjectName(u"previewButton")
-        self.previewButton.setGeometry(QRect(150, 490, 112, 41))
-        self.previewButton.resize(210,50)
-        self.previewButton.setStyleSheet(u"QPushButton {color: #333;\n"
-"border: 2px solid #555;\n"
-"border-radius: 11px;\n"
-"padding: 5px;\n"
-"background: qradialgradient(cx: 0.3, cy: -0.4,\n"
-"fx: 0.3, fy: -0.4,\n"
-"radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
-"min-width: 80px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"background: qradialgradient(cx: 0.3, cy: -0.4,\n"
-"fx: 0.3, fy: -0.4,\n"
-"radius: 1.35, stop: 0 #fff, stop: 1 #bbb);\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"background: qradialgradient(cx: 0.4, cy: -0.1,\n"
-"fx: 0.4, fy: -0.1,\n"
-"radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
-"}")
+
         self.finishButton = QPushButton(self.centralwidget)
         self.finishButton.setObjectName(u"finishButton")
         self.finishButton.setGeometry(QRect(450, 490, 112, 41))
@@ -2760,12 +2726,7 @@ class Ui_lightColor(object):
 "fx: 0.4, fy: -0.1,\n"
 "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
 "}")
-        self.label = QLabel(self.centralwidget)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(410, 410, 61, 16))
-        self.label_2 = QLabel(self.centralwidget)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(400, 410, 58, 16))
+
         lightColor.setCentralWidget(self.centralwidget)
         self.title.raise_()
         self.happy.raise_()
@@ -2848,15 +2809,13 @@ class Ui_lightColor(object):
         self.angerSlider.raise_()
         self.fearSlider.raise_()
         self.disgustSlider.raise_()
-        self.speedSlider.raise_()
-        self.displaySpeed.raise_()
-        self.previewButton.raise_()
+#        self.speedSlider.raise_()
+ #       self.displaySpeed.raise_()
+ #       self.previewButton.raise_()
         self.finishButton.raise_()
-        self.label_2.raise_()
-        self.label.raise_()
 
         self.retranslateUi(lightColor)
-        self.speedSlider.valueChanged.connect(self.label.setNum)
+#        self.speedSlider.valueChanged.connect(self.label.setNum)
 
         QMetaObject.connectSlotsByName(lightColor)
     # setupUi
@@ -2936,10 +2895,8 @@ class Ui_lightColor(object):
         self.disgustSky.setText("")
         self.disgustRed.setText("")
         self.disgust.setText(QCoreApplication.translate("lightColor", u"DISGUST", None))
-        self.displaySpeed.setText(QCoreApplication.translate("lightColor", u"DISPLAY SPEED", None))
-        self.previewButton.setText(QCoreApplication.translate("lightColor", u"Open Light Projection Preview", None))
-        self.finishButton.setText(QCoreApplication.translate("lightColor", u"Start Light Projections", None))
-        self.label.setText(QCoreApplication.translate("lightColor", u"0", None))
-        self.label_2.setText(QCoreApplication.translate("lightColor", u"x", None))
+ #       self.displaySpeed.setText(QCoreApplication.translate("lightColor", u"DISPLAY SPEED", None))
+ #      self.previewButton.setText(QCoreApplication.translate("lightColor", u"Open Light Projection Preview", None))
+        self.finishButton.setText(QCoreApplication.translate("lightColor", u"Start Performance", None))
     # retranslateUi
 

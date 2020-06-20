@@ -48,7 +48,7 @@ class MainApp(QWidget):
                                           "fx: 0.4, fy: -0.1,\n"
                                           "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
                                           "}")
-        self.Upload = QPushButton("Finish Recognition And Go To Color Mapping")
+        self.Upload = QPushButton("Stop Recognition And Go To Color Mapping Again")
         self.Upload.setEnabled(False)
         self.Upload.setObjectName(u"Upload")
         self.Upload.setGeometry(QRect(460, 530, 121, 41))

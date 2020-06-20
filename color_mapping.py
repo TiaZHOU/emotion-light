@@ -174,7 +174,6 @@ pos 5   "neutral"       num 5   "blue"
 pos 6   "sadness"       num 6   "purple"
 pos 7   "surprise"      num 7   "white"
 '''
-
 emotion = read_emotion(saturate)
 # emotion = set_saturate(saturate, emotion)
 # print(emotion)
