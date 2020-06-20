@@ -1,3 +1,18 @@
+'''
+This is main file of the project for UI display and interface and the UI is build by QT
+
+Interfaces have three sections:
+
+form  is mainWindow for welcome and sample hits
+dashboard is colorDashboard for users decide the relation between colors and emotions
+camera is cameraWindow for displaying the camera capture and light project at backend
+
+nothing need be fix on this file if the environment changed
+
+But remember fix details in recognition/noStreamCapture.py for hardware connection
+
+'''
+
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
@@ -17,6 +32,7 @@ class mainWindow(QMainWindow, Ui_StartPage):
         self.setupUi(self)
         print("Initialize")
 
+
 class cameraWindow(MainApp):
 
     def __init__(self):
@@ -30,41 +46,12 @@ class cameraWindow(MainApp):
     def reverseButtons(self):
         self.Upload.setEnabled(False)
         self.Upload.setStyleSheet(u"QPushButton {color: #333;\n"
-                                          "border: 2px solid #555;\n"
-                                          "border-radius: 11px;\n"
-                                          "padding: 5px;\n"
-                                          "background: #333\n")
-        self.startRecording.setEnabled(True)
-        self.startRecording.setStyleSheet(u"QPushButton {color: #333;\n"
                                   "border: 2px solid #555;\n"
                                   "border-radius: 11px;\n"
                                   "padding: 5px;\n"
-                                  "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
-                                  "fx: 0.3, fy: -0.4,\n"
-                                  "radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
-                                  "min-width: 80px;\n"
-                                  "}\n"
-                                  "\n"
-                                  "QPushButton:hover {\n"
-                                  "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
-                                  "fx: 0.3, fy: -0.4,\n"
-                                  "radius: 1.35, stop: 0 #fff, stop: 1 #bbb);\n"
-                                  "}\n"
-                                  "\n"
-                                  "QPushButton:pressed {\n"
-                                  "background: qradialgradient(cx: 0.4, cy: -0.1,\n"
-                                  "fx: 0.4, fy: -0.1,\n"
-                                  "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
-                                  "}")
-
-
-
-    def capturePicture(self):
-        print("Pressed")
-        self.startRecognition()
-        self.startRecording.setEnabled(False)
-        self.Upload.setEnabled(True)
-        self.Upload.setStyleSheet(u"QPushButton {color: #333;\n"
+                                  "background: #333\n")
+        self.startRecording.setEnabled(True)
+        self.startRecording.setStyleSheet(u"QPushButton {color: #333;\n"
                                           "border: 2px solid #555;\n"
                                           "border-radius: 11px;\n"
                                           "padding: 5px;\n"
@@ -85,13 +72,39 @@ class cameraWindow(MainApp):
                                           "fx: 0.4, fy: -0.1,\n"
                                           "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
                                           "}")
+
+    def capturePicture(self):
+        print("Pressed")
+        self.startRecognition()
+        self.startRecording.setEnabled(False)
+        self.Upload.setEnabled(True)
+        self.Upload.setStyleSheet(u"QPushButton {color: #333;\n"
+                                  "border: 2px solid #555;\n"
+                                  "border-radius: 11px;\n"
+                                  "padding: 5px;\n"
+                                  "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                  "fx: 0.3, fy: -0.4,\n"
+                                  "radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
+                                  "min-width: 80px;\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:hover {\n"
+                                  "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                  "fx: 0.3, fy: -0.4,\n"
+                                  "radius: 1.35, stop: 0 #fff, stop: 1 #bbb);\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:pressed {\n"
+                                  "background: qradialgradient(cx: 0.4, cy: -0.1,\n"
+                                  "fx: 0.4, fy: -0.1,\n"
+                                  "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
+                                  "}")
         self.startRecording.setStyleSheet(u"QPushButton {color: #333;\n"
                                           "border: 2px solid #555;\n"
                                           "border-radius: 11px;\n"
                                           "padding: 5px;\n"
                                           "background: #333\n")
         pass
-
 
     def uploadPicture(self):
         collectedEmmotions = self.stopRecognition()
@@ -102,16 +115,15 @@ class cameraWindow(MainApp):
         pass
 
 
-
 class colorDashboard(QMainWindow, Ui_lightColor):
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
 
- #       self.previewButton.clicked.connect(self.previewLight)
-  #      self.previewButton.clicked.connect(self.previewOpen)
-  #      self.finishButton.clicked.connect(self.finishEditing)
+    #       self.previewButton.clicked.connect(self.previewLight)
+    #      self.previewButton.clicked.connect(self.previewOpen)
+    #      self.finishButton.clicked.connect(self.finishEditing)
 
     def happyColor(self):
         # The color selected for each emotion will be transmitted in the format of RGB
@@ -285,64 +297,37 @@ class colorDashboard(QMainWindow, Ui_lightColor):
     def emotionBright(self):
         # The brightness will be adjusted through sliders and the value should be divided by 100 as percentage
         global happyBright, surprisedBright, neutralBright, sadBright, contemptBright, angerBright, fearBright, disgustBright
-        happyBright = self.happySlider.value()/100
-        surprisedBright = self.surprisedSlider.value()/100
-        neutralBright = self.neutralSlider.value()/100
-        sadBright = self.sadSlider.value()/100
-        contemptBright = self.contemptSlider.value()/100
-        angerBright = self.angerSlider.value()/100
-        fearBright = self.fearSlider.value()/100
-        disgustBright = self.disgustSlider.value()/100
+        happyBright = self.happySlider.value() / 100
+        surprisedBright = self.surprisedSlider.value() / 100
+        neutralBright = self.neutralSlider.value() / 100
+        sadBright = self.sadSlider.value() / 100
+        contemptBright = self.contemptSlider.value() / 100
+        angerBright = self.angerSlider.value() / 100
+        fearBright = self.fearSlider.value() / 100
+        disgustBright = self.disgustSlider.value() / 100
 
     def playSpeed(self):
         # The range of value on slider is from 100 to 1000, set as times speed
         global speedValue
         speedValue = 1
 
-    def previewLight(self):
-        # main begin
-        pictureGenerate = generate()
+    def write_set(self):
         model = [happy, surprised, neutral, sad, contempt, anger, fear,
                  disgust]  # initial color model, numbers refer to colors, positions refer to emotions
         saturate = [happyBright, surprisedBright, neutralBright, sadBright, contemptBright, angerBright, fearBright,
                     disgustBright]
-        speed = speedValue
-
-        emotion = generate.read_emotion(saturate)
-        # emotion = set_saturate(saturate, emotion)
-        # print(emotion)
-        color_list = generate.max_two_emo(emotion)
-        # print(color_list)
-
-        # simulate user change color3 to emotion5
-        # TODO set color change API for interface
-        # color_change(model, 3, 5)
-
-        # generate two pic then merge on weight
-        #
-        global output
-        output = [[0 for i in range(4)] for i in range(len(color_list))]
-        display = [0 for i in range(len(color_list))]
-        for i in range(len(color_list)):
-            img1 = generate.color_pick(pictureGenerate, model[color_list[i][0]])
-            img2 = generate.color_pick(pictureGenerate, model[color_list[i][1]])
-            # TODO the add should more sensitive because many neutral
-            clA = cv.addWeighted(img1, emotion[i][color_list[i][0]], img2, emotion[i][color_list[i][1]], 0)
-            # cv.imshow('clA', clA)
-            # cv.waitKey(0)
-            output[i][0] = int(clA[0][0][0].astype(str))
-            output[i][1] = int(clA[0][0][1].astype(str))
-            output[i][2] = int(clA[0][0][2].astype(str))
-            output[i][3] = int(1000 / speed)
-            print(output[i])  # final result RGB code
-            # display[i] = create_image(r=clA[i][0][0], g=clA[i][0][1], b=clA[i][0][2])
-            # ser = serial.Serial("COM5", 9600, timeout=5)
-        generate.finalout(output)
-
+        model_w = open("model.txt", 'w+')
+        sat_w = open("saturate.txt", 'w+')
+        for i in range(8):
+            model_w.write(model[i].__str__() + "\n")
+            sat_w.write(saturate[i].__str__() + "\n")
+        model_w.close()
+        sat_w.close()
 
     def previewOpen(self):
         preview = previewDialog()
         preview.exec_()
+
 
 class successDialog(QDialog):
 
@@ -357,26 +342,26 @@ class successDialog(QDialog):
         exitButton = QPushButton("QUIT")
 
         homeButton.setStyleSheet(u"QPushButton {color: #333;\n"
-                                          "border: 2px solid #555;\n"
-                                          "border-radius: 11px;\n"
-                                          "padding: 5px;\n"
-                                          "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
-                                          "fx: 0.3, fy: -0.4,\n"
-                                          "radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
-                                          "min-width: 80px;\n"
-                                          "}\n"
-                                          "\n"
-                                          "QPushButton:hover {\n"
-                                          "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
-                                          "fx: 0.3, fy: -0.4,\n"
-                                          "radius: 1.35, stop: 0 #fff, stop: 1 #bbb);\n"
-                                          "}\n"
-                                          "\n"
-                                          "QPushButton:pressed {\n"
-                                          "background: qradialgradient(cx: 0.4, cy: -0.1,\n"
-                                          "fx: 0.4, fy: -0.1,\n"
-                                          "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
-                                          "}")
+                                 "border: 2px solid #555;\n"
+                                 "border-radius: 11px;\n"
+                                 "padding: 5px;\n"
+                                 "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                 "fx: 0.3, fy: -0.4,\n"
+                                 "radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
+                                 "min-width: 80px;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:hover {\n"
+                                 "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                 "fx: 0.3, fy: -0.4,\n"
+                                 "radius: 1.35, stop: 0 #fff, stop: 1 #bbb);\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:pressed {\n"
+                                 "background: qradialgradient(cx: 0.4, cy: -0.1,\n"
+                                 "fx: 0.4, fy: -0.1,\n"
+                                 "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
+                                 "}")
         exitButton.setStyleSheet(u"QPushButton {color: #333;\n"
                                  "border: 2px solid #555;\n"
                                  "border-radius: 11px;\n"
@@ -411,6 +396,7 @@ class successDialog(QDialog):
         homeButton.clicked.connect(self.close)
         exitButton.clicked.connect(exit)
 
+
 class previewDialog(QDialog):
 
     def __init__(self, parent=None):
@@ -426,26 +412,26 @@ class previewDialog(QDialog):
         backButton = QPushButton("Back")
 
         backButton.setStyleSheet(u"QPushButton {color: #333;\n"
-                                          "border: 2px solid #555;\n"
-                                          "border-radius: 11px;\n"
-                                          "padding: 5px;\n"
-                                          "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
-                                          "fx: 0.3, fy: -0.4,\n"
-                                          "radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
-                                          "min-width: 80px;\n"
-                                          "}\n"
-                                          "\n"
-                                          "QPushButton:hover {\n"
-                                          "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
-                                          "fx: 0.3, fy: -0.4,\n"
-                                          "radius: 1.35, stop: 0 #fff, stop: 1 #bbb);\n"
-                                          "}\n"
-                                          "\n"
-                                          "QPushButton:pressed {\n"
-                                          "background: qradialgradient(cx: 0.4, cy: -0.1,\n"
-                                          "fx: 0.4, fy: -0.1,\n"
-                                          "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
-                                          "}")
+                                 "border: 2px solid #555;\n"
+                                 "border-radius: 11px;\n"
+                                 "padding: 5px;\n"
+                                 "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                 "fx: 0.3, fy: -0.4,\n"
+                                 "radius: 1.35, stop: 0 #fff, stop: 1 #888);\n"
+                                 "min-width: 80px;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:hover {\n"
+                                 "background: qradialgradient(cx: 0.3, cy: -0.4,\n"
+                                 "fx: 0.3, fy: -0.4,\n"
+                                 "radius: 1.35, stop: 0 #fff, stop: 1 #bbb);\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:pressed {\n"
+                                 "background: qradialgradient(cx: 0.4, cy: -0.1,\n"
+                                 "fx: 0.4, fy: -0.1,\n"
+                                 "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);\n"
+                                 "}")
 
         layout = QVBoxLayout()
         layout.addWidget(self.progress)
@@ -454,8 +440,9 @@ class previewDialog(QDialog):
         self.setLayout(layout)
         backButton.clicked.connect(self.close)
 
+
 app = QApplication(sys.argv)
-form=mainWindow()
+form = mainWindow()
 form.show()
 
 #
@@ -553,5 +540,6 @@ dashboard.disgustSlider.sliderReleased.connect(dashboard.emotionBright)
 
 status = successDialog()
 dashboard.finishButton.clicked.connect(camera.show)
+dashboard.finishButton.clicked.connect(dashboard.write_set)
 dashboard.finishButton.clicked.connect(dashboard.close)
 app.exec_()

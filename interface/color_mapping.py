@@ -1,3 +1,10 @@
+'''
+
+this already merge into noStreamCapture.py
+ for live version
+'''
+
+
 import json
 import cv2 as cv
 import numpy as np

@@ -1,3 +1,13 @@
+'''
+1.  change Url in blink() and final_output() when network environment changed
+2.  Check if requests lines are commented or not , they are commented sometime because saving testing time
+3.  make sure default model.txt and saturate.txt exist in root lib before run.
+    If they are not here, commenting those two method in class VideoGet and run once to generate
+4.  change the API key in processInAzure() into yours if exist one down
+
+'''
+
+
 from threading import Thread
 import cv2 as cv
 import json
@@ -5,11 +15,32 @@ import numpy as np
 import requests
 import time
 
-
+'''
+this is the default for users who forget set something
+'''
 global model
 model = [0, 1, 2, 3, 4, 5, 6, 7]
 global saturate
 saturate = [1, 1, 1, 1, 1, 1, 1, 1]
+
+def read_model():
+    model_r = open("model.txt", 'r')
+    models = model_r.readlines()
+    i = 0
+    for mod in models:
+        models[i] = int(mod)
+        i =i+1
+    model_r.close()
+    return models
+
+def read_saturate():
+    sat_r = open("saturate.txt", 'r')
+    saturates = sat_r.readlines()
+    i =0
+    for sat in saturates:
+        saturates[i] = float(sat)
+    sat_r.close()
+    return saturates
 
 
 def max_two_emo(emotion_result):
@@ -42,7 +73,7 @@ def read_emotion(data, order, saturates):
     emotion[5] = data[i]['faceAttributes']['emotion']['anger'] * saturates[5]
     emotion[6] = data[i]['faceAttributes']['emotion']['fear'] * saturates[6]
     emotion[7] = data[i]['faceAttributes']['emotion']['disgust'] * saturates[7]
-    print('The' + order.__str__() + 'th pictures is send')
+    #print('The' + order.__str__() + 'th pictures is send')
     return emotion
 
 
@@ -82,25 +113,22 @@ def color_pick(color_num):
 
 
 def output(emotion, model_list, c_list):
-    print ("loca 1")
     result = [0 for i in range(3)]
     img1 = color_pick(model_list[list[0]])
     img2 = color_pick(model_list[list[1]])
     # TODO the add should more sensitive because many neutral
-    print("good")
     clA = cv.addWeighted(img1, emotion[c_list[0]], img2, emotion[c_list[1]], 0)
     result[0] = int(clA[0][0][0].astype(str))
     result[1] = int(clA[0][0][1].astype(str))
     result[2] = int(clA[0][0][2].astype(str))
-    print(result)  # final result RGB code
 
 def blink():
     url = "http://192.168.43.24/"
-    r = requests.get(url+'W')
+#    r = requests.get(url+'W')
     time.sleep(0.05)
-    r = requests.getD(url+'D')
+#    r = requests.getD(url+'D')
     time.sleep(0.05)
-    r = requests.get(url+'W')
+#    r = requests.get(url+'W')
     print("blink done")
 
 
@@ -119,7 +147,7 @@ def final_output(result):
     green = OuttoString(result[1])
     blue = OuttoString(result[0])
     send = url + red + '_' + green + '_' + blue + finder
-    r = requests.post(send)
+#    r = requests.post(send)
     print(send)
 
 class VideoGet:
@@ -127,7 +155,8 @@ class VideoGet:
     Class that continuously gets frames from a VideoCapture object
     with a dedicated thread.
     """
-
+    model = read_model()
+    saturate = read_saturate()
     def __init__(self, stream):
         self.stream = stream
         (self.grabbed, self.frame) = self.stream.read()
@@ -142,7 +171,7 @@ class VideoGet:
         count = 0
         order = 0
         frame_number = 0
-        samples_per_second = 1
+        samples_per_second = 10
         sample_rate = 30 / samples_per_second
         blink()
         while not self.stopped:
@@ -154,28 +183,26 @@ class VideoGet:
                 # print(self.collectedData)
                 try:
                     emotion = read_emotion(self.collectedData, order, saturate)
-                    print(emotion)
+                    #print(emotion)
                     color_list = max_two_emo(emotion)
-                    print(color_list)
+                    #print(color_list)
                     order += 1
                 except Exception:
-                    print("no face")
+                    print("color mapping exception")
 
                 try:
-                    print("loca 1")
                     result = [0 for i in range(3)]
                     img1 = color_pick(model[color_list[0]])
                     img2 = color_pick(model[color_list[1]])
-                    print("good")
                     clA = cv.addWeighted(img1, emotion[color_list[0]], img2, emotion[color_list[1]], 0)
-                    print("CLA done")
                     result[0] = int(clA[0][0][0].astype(str))
                     result[1] = int(clA[0][0][1].astype(str))
                     result[2] = int(clA[0][0][2].astype(str))
-                    print(result)
+                    time.sleep(0.5)
+                    #print(result)
                     final_output(result)
                 except Exception:
-                    print("output fail")
+                    print("output exception")
                 count += 100  # i.e. at 30 fps, this advances one second
                 self.stream.set(1, count)
                 frame_number = 0
@@ -212,4 +239,4 @@ class VideoGet:
             # print(gotBack[0])
             collectedData.append(gotBack[0])
         except Exception:
-            print("exception")
+            print("recognition exception")
