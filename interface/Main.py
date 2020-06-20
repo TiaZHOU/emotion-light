@@ -11,8 +11,6 @@ import json
 from recognition.captureAndRecognize import CaptureRecognize
 
 
-
-
 class mainWindow(QMainWindow, Ui_StartPage):
 
     def __init__(self, parent=None):
@@ -112,8 +110,8 @@ class colorDashboard(QMainWindow, Ui_lightColor):
         super().__init__(parent)
         self.setupUi(self)
 
-        self.previewButton.clicked.connect(self.previewLight)
-        self.previewButton.clicked.connect(self.previewOpen)
+ #       self.previewButton.clicked.connect(self.previewLight)
+  #      self.previewButton.clicked.connect(self.previewOpen)
         self.finishButton.clicked.connect(self.finishEditing)
 
     def happyColor(self):
@@ -300,7 +298,7 @@ class colorDashboard(QMainWindow, Ui_lightColor):
     def playSpeed(self):
         # The range of value on slider is from 100 to 1000, set as times speed
         global speedValue
-        speedValue = self.speedSlider.value()
+        speedValue = 1
 
     def previewLight(self):
         # main begin
@@ -466,11 +464,11 @@ form=mainWindow()
 form.show()
 
 #
+dashboard = colorDashboard()
 camera = cameraWindow()
-form.started.clicked.connect(camera.show)
+form.started.clicked.connect(dashboard.show)
 form.started.clicked.connect(form.close)
 
-dashboard = colorDashboard()
 camera.Upload.clicked.connect(camera.uploadPicture)
 camera.Upload.clicked.connect(dashboard.show)
 
@@ -559,9 +557,7 @@ dashboard.angerSlider.sliderReleased.connect(dashboard.emotionBright)
 dashboard.fearSlider.sliderReleased.connect(dashboard.emotionBright)
 dashboard.disgustSlider.sliderReleased.connect(dashboard.emotionBright)
 
-dashboard.speedSlider.sliderReleased.connect(dashboard.playSpeed)
-
 status = successDialog()
-dashboard.finishButton.clicked.connect(status.show)
-
+dashboard.finishButton.clicked.connect(camera.show)
+dashboard.finishButton.clicked.connect(dashboard.close)
 app.exec_()
