@@ -124,11 +124,11 @@ def output(emotion, model_list, c_list):
 
 def blink():
     url = "http://192.168.43.24/"
-#    r = requests.get(url+'W')
+    r = requests.get(url+'W')
     time.sleep(0.05)
-#    r = requests.getD(url+'D')
+    r = requests.get(url+'D')
     time.sleep(0.05)
-#    r = requests.get(url+'W')
+    r = requests.get(url+'W')
     print("blink done")
 
 
@@ -147,7 +147,7 @@ def final_output(result):
     green = OuttoString(result[1])
     blue = OuttoString(result[0])
     send = url + red + '_' + green + '_' + blue + finder
-#    r = requests.post(send)
+    r = requests.post(send)
     print(send)
 
 class VideoGet:
