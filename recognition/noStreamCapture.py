@@ -6,8 +6,7 @@
 4.  change the API key in processInAzure() into yours if exist one down
 
 '''
-
-
+import traceback
 from threading import Thread
 import cv2 as cv
 import json
@@ -19,10 +18,9 @@ import time
 this is the default for users who forget set something
 '''
 global model
-model = [0, 1, 2, 3, 4, 5, 6, 7]
+model = [4, 8, 6, 2, 8, 1, 8, 8]
 global saturate
 saturate = [1, 1, 1, 1, 1, 1, 1, 1]
-
 def read_model():
     model_r = open("model.txt", 'r')
     models = model_r.readlines()
@@ -90,7 +88,7 @@ def color_pick(color_num):
     color1_orange = create_image(r=255, g=165, b=0)
     color2_yellow = create_image(r=255, g=255, b=0)
     color3_green = create_image(r=0, g=255, b=0)
-    color4_sky = create_image(r=135, g=206, b=235)
+    color4_sky = create_image(r=5, g=16, b=235)
     color5_blue = create_image(r=0, g=0, b=255)
     color6_indigo = create_image(r=75, g=0, b=130)
     color7_purple = create_image(r=128, g=0, b=128)
@@ -112,23 +110,19 @@ def color_pick(color_num):
         return color7_purple
 
 
-def output(emotion, model_list, c_list):
-    result = [0 for i in range(3)]
-    img1 = color_pick(model_list[list[0]])
-    img2 = color_pick(model_list[list[1]])
-    # TODO the add should more sensitive because many neutral
-    clA = cv.addWeighted(img1, emotion[c_list[0]], img2, emotion[c_list[1]], 0)
-    result[0] = int(clA[0][0][0].astype(str))
-    result[1] = int(clA[0][0][1].astype(str))
-    result[2] = int(clA[0][0][2].astype(str))
-
 def blink():
     url = "http://192.168.43.24/"
     r = requests.get(url+'W')
-    time.sleep(0.05)
+    time.sleep(0.0005)
     r = requests.get(url+'D')
-    time.sleep(0.05)
+    time.sleep(0.0005)
     r = requests.get(url+'W')
+    time.sleep(0.0005)
+    r = requests.get(url+'D')
+    time.sleep(0.0005)
+    r = requests.get(url+'W')
+    time.sleep(0.0005)
+    r = requests.get(url+'D')
     print("blink done")
 
 
@@ -171,21 +165,22 @@ class VideoGet:
         count = 0
         order = 0
         frame_number = 0
-        samples_per_second = 10
+        samples_per_second = 30
         sample_rate = 30 / samples_per_second
         blink()
         while not self.stopped:
             ret, frame = self.stream.read()
             frame_number = frame_number + 1;
             if frame_number > sample_rate:
+                print("took a frame sample")
                 output = frame.copy()
                 self.processInAzure(output, self.collectedData)
                 # print(self.collectedData)
                 try:
                     emotion = read_emotion(self.collectedData, order, saturate)
-                    #print(emotion)
+                    print(emotion)
                     color_list = max_two_emo(emotion)
-                    #print(color_list)
+                    print(color_list)
                     order += 1
                 except Exception:
                     print("color mapping exception")
@@ -193,16 +188,21 @@ class VideoGet:
                 try:
                     result = [0 for i in range(3)]
                     img1 = color_pick(model[color_list[0]])
-                    img2 = color_pick(model[color_list[1]])
-                    clA = cv.addWeighted(img1, emotion[color_list[0]], img2, emotion[color_list[1]], 0)
+                    #img2 = color_pick(model[color_list[1]])
+                    print("imgs good")
+                    clA = img1
+                    #clA = cv.addWeighted(img1, emotion[color_list[0]], img2, emotion[color_list[1]], 0)
+                    #print(clA)
+                    #print("clA get")
                     result[0] = int(clA[0][0][0].astype(str))
                     result[1] = int(clA[0][0][1].astype(str))
                     result[2] = int(clA[0][0][2].astype(str))
-                    time.sleep(0.5)
-                    #print(result)
+                    #time.sleep(0.5)
+                    print(result)
                     final_output(result)
                 except Exception:
                     print("output exception")
+                    traceback.print_exc()
                 count += 100  # i.e. at 30 fps, this advances one second
                 self.stream.set(1, count)
                 frame_number = 0
@@ -210,6 +210,7 @@ class VideoGet:
                 a = 1 + 1
             else:
                 self.stream.release()
+                print("213")
                 break
 
     def stop(self):
@@ -220,9 +221,9 @@ class VideoGet:
 
     def processInAzure(self, image, collectedData):
         img = cv.imencode('.jpg', image)[1].tostring()
-        subscription_key = "747a8208ff0f422499c5ecdc7c059551"
+        subscription_key = "91919b981a02476f87bc0865c6d4d9e9"
         # replace <My Endpoint String> with the string from your endpoint URL
-        face_api_url = 'https://eldar-face-recognition.cognitiveservices.azure.com/face/v1.0/detect?recognitionModel=recognition_01&returnRecognitionModel=false&detectionModel=detection_01'
+        face_api_url = 'https://junetwentyone.cognitiveservices.azure.com/face/v1.0/detect?recognitionModel=recognition_01&returnRecognitionModel=false&detectionModel=detection_01'
         headers = {'Content-Type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': subscription_key}
 
         params = {
