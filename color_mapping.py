@@ -4,18 +4,6 @@ import numpy as np
 import requests
 import time
 
-
-# store color results into .txt
-def store(data):
-    file = open('displayList.txt', 'w')
-    for ip in data:
-        for i in ip:
-            file.write(i)
-            file.write(' ')
-        file.write('\n')
-    file.close()
-
-
 # load json data from file
 # read data from .json file from azure
 def read_emotion(saturate):
