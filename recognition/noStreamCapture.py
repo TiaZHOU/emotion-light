@@ -18,7 +18,7 @@ import time
 this is the default for users who forget set something
 '''
 global model
-model = [4, 8, 6, 2, 8, 1, 8, 8]
+model = [1, 2, 3, 4, 5, 6, 7, 8]
 global saturate
 saturate = [1, 1, 1, 1, 1, 1, 1, 1]
 def read_model():
@@ -188,10 +188,10 @@ class VideoGet:
                 try:
                     result = [0 for i in range(3)]
                     img1 = color_pick(model[color_list[0]])
-                    #img2 = color_pick(model[color_list[1]])
+                    img2 = color_pick(model[color_list[1]])
                     print("imgs good")
                     clA = img1
-                    #clA = cv.addWeighted(img1, emotion[color_list[0]], img2, emotion[color_list[1]], 0)
+                    clA = cv.addWeighted(img1, emotion[color_list[0]], img2, emotion[color_list[1]], 0)
                     #print(clA)
                     #print("clA get")
                     result[0] = int(clA[0][0][0].astype(str))
@@ -199,7 +199,7 @@ class VideoGet:
                     result[2] = int(clA[0][0][2].astype(str))
                     #time.sleep(0.5)
                     print(result)
-                    final_output(result)
+                    #final_output(result)
                 except Exception:
                     print("output exception")
                     traceback.print_exc()
