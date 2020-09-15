@@ -1,4 +1,5 @@
 # This is the source code collection of Emotion light of INFO90003
+# Video of the project is https://www.youtube.com/watch?v=KIMvJKLBZRc&feature=youtu.be
 
 ## Team members:
 Chaoran Jin
